@@ -2,7 +2,14 @@ from flask import Flask, jsonify, send_file, render_template_string
 import os
 
 app = Flask(__name__)
-
+@app.route("/")
+def index():
+    return jsonify({
+        "status": "ok",
+        "service": "mc-launcher-update",
+        "endpoints": ["/update"]
+    })
+    
 # =========================
 # KONFIGURATION
 # =========================
