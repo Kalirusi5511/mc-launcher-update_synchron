@@ -2,14 +2,7 @@ from flask import Flask, jsonify, send_file, render_template_string
 import os
 
 app = Flask(__name__)
-@app.route("/")
-def index():
-    return jsonify({
-        "status": "ok",
-        "service": "mc-launcher-update",
-        "endpoints": ["/update"]
-    })
-    
+
 # =========================
 # KONFIGURATION
 # =========================
@@ -19,7 +12,7 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 UPDATE_ZIP = os.path.join(BASE_DIR, "update.zip")
 
 # =========================
-# HTML SEITE (STARTSEITE)
+# HTML SEITE
 # =========================
 HTML_PAGE = """
 <!DOCTYPE html>
@@ -44,9 +37,7 @@ HTML_PAGE = """
             background-color: #020617;
             box-shadow: 0 0 20px rgba(0,255,255,0.3);
         }
-        h1 {
-            color: #38bdf8;
-        }
+        h1 { color: #38bdf8; }
         .loader {
             margin: 25px auto;
             border: 6px solid #1e293b;
@@ -84,8 +75,17 @@ HTML_PAGE = """
 # =========================
 
 @app.route("/")
-def index():
+def homepage():
     return render_template_string(HTML_PAGE, version=CURRENT_VERSION)
+
+@app.route("/status")
+def status():
+    return jsonify({
+        "status": "ok",
+        "service": "mc-launcher-update",
+        "version": CURRENT_VERSION,
+        "endpoints": ["/version", "/update"]
+    })
 
 @app.route("/version")
 def version():
